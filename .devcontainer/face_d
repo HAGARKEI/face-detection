@@ -1,0 +1,24 @@
+import streamlit as st
+from ultralytics import YOLO
+import requests
+from PIL import Image
+
+#Title
+st.markdown('<h1 dir=rtl>זיהוי יולו - המודל של המורה תומר</h1>', unsafe_allow_html=True)
+
+model = YOLO("yolov8m.pt")  <== Your YOLO model
+
+
+#Get image URL from user
+image_path=st.text_input("הכניסו לינק לתמונה","https://hips.hearstapps.com/hmg-prod/images/dog-puppy-on-garden-royalty-free-image-1586966191.jpg")
+
+#Get image from URL and predict
+if image_path:
+    try:
+        st.write("מזהה...")
+        with st.spinner("Classifying..."):
+            res=model.predict(image_path)
+            st.image(res[0].plot()[:, :, ::-1], caption='Detected Image', use_column_width=True)
+    except:
+        st.write("Error")
+        
